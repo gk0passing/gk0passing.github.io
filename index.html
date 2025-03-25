@@ -1,0 +1,106 @@
+<!-- templates/index.html（前端页面） -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Multi-Label Image Classification</title>
+    <style>
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .upload-box { 
+            border: 2px dashed #cccccc; 
+            border-radius: 5px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        #preview { 
+            max-width: 100%; 
+            margin: 20px 0;
+            display: none;
+        }
+        .result-item {
+            background: #f8f9fa;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .progress-bar {
+            height: 5px;
+            background: #007bff;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Multi-Label Image Classification</h1>
+        
+        <div class="upload-box">
+            <input type="file" id="fileInput" accept="image/*" hidden>
+            <button onclick="document.getElementById('fileInput').click()">
+                Upload Image
+            </button>
+            <p>or drag and drop image here</p>
+        </div>
+        
+        <img id="preview">
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const preview = document.getElementById('preview');
+        const resultsDiv = document.getElementById('results');
+        
+        // 处理文件选择
+        document.getElementById('fileInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            // 显示预览
+            preview.style.display = 'block';
+            preview.src = URL.createObjectURL(file);
+            
+            // 发送请求
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    resultsDiv.innerHTML = `<div class="error">${data.error}</div>`;
+                    return;
+                }
+                
+                // 显示结果
+                let html = '<h3>Detection Results:</h3>';
+                data.results.forEach(item => {
+                    html += `
+                        <div class="result-item">
+                            <div>${item.label}</div>
+                            <div>${(item.probability * 100).toFixed(1)}%</div>
+                            <div class="progress-bar" 
+                                 style="width: ${item.probability * 100}%"></div>
+                        </div>
+                    `;
+                });
+                resultsDiv.innerHTML = html;
+                
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="error">${error.message}</div>`;
+            }
+        });
+
+        // 拖拽上传功能
+        document.addEventListener('dragover', (e) => e.preventDefault());
+        document.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                document
