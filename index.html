@@ -3,200 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>杨雯涵 | 个人主页</title>
+    <title>杨雯涵 | Wenhan's World</title>
     <style>
-        :root {
-            --primary-color: #e0c3fc;
-            --secondary-color: #8ec5fc;
-            --text-color: #ffffff;
-        }
-
-        body, html {
+        /* 1. 活泼的马卡龙渐变背景 */
+        body {
             margin: 0;
             padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            font-family: 'STKaiti', 'KaiTi', serif; /* 使用更有韵味的楷体 */
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #fceaf0 0%, #f9d5e5 25%, #e2f0f9 50%, #d5e8f7 75%, #f6e5f5 100%);
+            background-size: 400% 400%;
+            animation: flow 10s ease infinite;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            cursor: url('https://cdn-icons-png.flaticon.com/32/1077/1077035.png'), auto; /* 尝试自定义鼠标图标 */
         }
 
-        /* 背景渐变动画 */
-        @keyframes gradientBG {
+        @keyframes flow {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* 装饰背景光斑 */
-        .circles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 1;
-        }
-        .circles li {
-            position: absolute;
-            list-style: none;
-            display: block;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 50%;
-            bottom: -150px;
-            animation: animateCircle 25s linear infinite;
-        }
-
-        @keyframes animateCircle {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; }
-        }
-
-        /* 主容器 */
-        .container {
-            position: relative;
-            z-index: 2;
+        /* 2. 名字样式：彩虹光效 */
+        .name-container {
+            margin-bottom: 40px;
             text-align: center;
-            perspective: 1000px;
+            z-index: 10;
         }
 
-        /* 名字样式 */
         h1 {
-            font-size: 4rem;
-            color: white;
-            margin-bottom: 10px;
-            letter-spacing: 12px;
-            text-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            opacity: 0;
-            animation: fadeInUp 1.5s ease forwards;
+            font-size: 4.5rem;
+            margin: 0;
+            background: linear-gradient(to right, #ff6b6b, #ff9f43, #54a0ff, #5f27cd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.1));
+            animation: pulse 2s ease-in-out infinite;
         }
 
-        .subtitle {
-            color: rgba(255,255,255,0.8);
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            letter-spacing: 4px;
-            opacity: 0;
-            animation: fadeInUp 1.5s ease forwards 0.5s;
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
-        /* 3D动态相框 */
-        .photo-card {
-            width: 320px;
-            height: 480px;
-            margin: 0 auto;
+        /* 3. 核心：拍立得照片卡片 */
+        .polaroid {
             position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-            cursor: pointer;
-            opacity: 0;
-            animation: zoomIn 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.8s;
+            width: 300px;
+            background: white;
+            padding: 15px 15px 60px 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            border-radius: 5px;
+            /* 摇摆动画 */
+            transform-origin: top center;
+            animation: swing 3s ease-in-out infinite;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            user-select: none;
         }
 
-        /* 悬浮呼吸动画 */
-        .floating {
-            animation: floating 4s ease-in-out infinite;
+        /* 悬停时照片会变大并停止剧烈摇摆 */
+        .polaroid:hover {
+            transform: scale(1.1) rotate(0deg) !important;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            z-index: 20;
         }
 
-        @keyframes floating {
-            0%, 100% { transform: translateY(0) rotateX(0) rotateY(0); }
-            50% { transform: translateY(-20px) rotateX(5deg) rotateY(5deg); }
-        }
-
-        .photo-card:hover {
-            transform: scale(1.05) rotateX(5deg) rotateY(5deg);
-        }
-
-        .photo-inner {
+        /* 照片容器 */
+        .photo-box {
             width: 100%;
-            height: 100%;
-            border-radius: 20px;
+            height: 350px;
             overflow: hidden;
-            border: 8px solid rgba(255,255,255,0.3);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-            backdrop-filter: blur(10px);
-            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            background: #eee;
         }
 
-        .photo-inner img {
+        .photo-box img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            /* 图片内部滚动效果 */
-            animation: slowPan 20s linear infinite alternate;
+            object-fit: cover; /* 保证图片不变形 */
+            transition: transform 0.5s ease;
         }
 
-        @keyframes slowPan {
-            0% { transform: scale(1.0); object-position: center; }
-            100% { transform: scale(1.15); object-position: top; }
+        .polaroid:hover img {
+            transform: scale(1.2); /* 悬停时照片内部放大 */
         }
 
-        /* 入场动画 */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes zoomIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        /* 页脚装饰 */
-        footer {
+        /* 拍立得下方的文字备注 */
+        .caption {
             position: absolute;
-            bottom: 30px;
-            color: white;
+            bottom: 15px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: #ff7675;
+            font-size: 1.5rem;
+            font-family: 'Kaiti', cursive;
+            font-weight: bold;
+        }
+
+        /* 摇摆动画逻辑 */
+        @keyframes swing {
+            0% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+            100% { transform: rotate(-3deg); }
+        }
+
+        /* 4. 漂浮装饰物 */
+        .decoration {
+            position: absolute;
+            pointer-events: none;
+            font-size: 2rem;
+            z-index: 5;
+            animation: floatUp 5s linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* 5. 底部装饰按钮/标签 */
+        .tags {
+            margin-top: 50px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .tag {
+            padding: 8px 20px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 20px;
+            color: #636e72;
             font-size: 0.9rem;
-            opacity: 0.6;
-            z-index: 2;
+            backdrop-filter: blur(5px);
+            border: 1px solid white;
         }
     </style>
 </head>
-<body>
+<body onclick="createHeart(event)">
 
-    <ul class="circles">
-        <li style="left: 25%; width: 80px; height: 80px; animation-delay: 0s;"></li>
-        <li style="left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s;"></li>
-        <li style="left: 70%; width: 20px; height: 20px; animation-delay: 4s;"></li>
-        <li style="left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s;"></li>
-        <li style="left: 65%; width: 20px; height: 20px; animation-delay: 0s;"></li>
-        <li style="left: 75%; width: 110px; height: 110px; animation-delay: 3s;"></li>
-    </ul>
-
-    <div class="container">
+    <div class="name-container">
         <h1>杨雯涵</h1>
-        <div class="subtitle">于时光中 绽放优雅</div>
-
-        <div class="photo-card floating" id="card">
-            <div class="photo-inner">
-                <!-- 替换为你的照片文件名 -->
-                <img src="photo.png" alt="杨雯涵">
-            </div>
-        </div>
+        <div style="color: #636e72; letter-spacing: 5px;">WENHAN YANG</div>
     </div>
 
-    <footer>© 2024 Yang Wenhan. All Rights Reserved.</footer>
+    <!-- 拍立得照片区域 -->
+    <div class="polaroid">
+        <div class="photo-box">
+            <!-- 请确保你的图片文件名叫 photo.jpg -->
+            <img src="photo.png" alt="杨雯涵的照片">
+        </div>
+        <div class="caption">✨ 这里的风景真好 ✨</div>
+    </div>
 
+    <div class="tags">
+        <span class="tag"># 元气满满</span>
+        <span class="tag"># 独一无二</span>
+        <span class="tag"># 2024</span>
+    </div>
+
+    <!-- 交互脚本 -->
     <script>
-        // 增加一个简单的鼠标跟随3D效果
-        const card = document.getElementById('card');
-        document.addEventListener('mousemove', (e) => {
-            let xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-            let yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
-        });
+        // 1. 点击产生爱心效果
+        function createHeart(e) {
+            const emojis = ['❤️', '✨', '🌸', '⭐', '🎈', '🌈'];
+            const heart = document.createElement('div');
+            heart.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+            heart.style.position = 'absolute';
+            heart.style.left = e.pageX + 'px';
+            heart.style.top = e.pageY + 'px';
+            heart.style.fontSize = Math.random() * 20 + 20 + 'px';
+            heart.style.pointerEvents = 'none';
+            heart.style.transition = 'all 1s ease-out';
+            heart.style.zIndex = '100';
+            
+            document.body.appendChild(heart);
 
-        // 鼠标离开时恢复
-        document.addEventListener('mouseleave', () => {
-            card.style.transform = `rotateY(0deg) rotateX(0deg)`;
-        });
+            // 让文字往上飘并消失
+            setTimeout(() => {
+                heart.style.transform = `translateY(-100px) scale(2)`;
+                heart.style.opacity = '0';
+            }, 50);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 1000);
+        }
+
+        // 2. 自动产生背景漂浮物
+        function createDecoration() {
+            const decos = ['☁️', '🌸', '✨', '🍋'];
+            const deco = document.createElement('div');
+            deco.className = 'decoration';
+            deco.innerHTML = decos[Math.floor(Math.random() * decos.length)];
+            deco.style.left = Math.random() * 100 + 'vw';
+            deco.style.animationDuration = Math.random() * 3 + 4 + 's';
+            document.body.appendChild(deco);
+
+            setTimeout(() => {
+                deco.remove();
+            }, 6000);
+        }
+
+        setInterval(createDecoration, 1000);
     </script>
 </body>
 </html>
